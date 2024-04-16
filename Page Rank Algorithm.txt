@@ -1,0 +1,38 @@
+def calculate_pagerank(graph, damping_factor=0.85, epsilon=1.0e-8, max_iterations=100):
+    num_nodes = len(graph) 
+    initial_score = 1 / num_nodes
+    pagerank_scores = {node: initial_score for node in graph}
+    
+    for _ in range(max_iterations): 
+        new_pagerank_scores = {} 
+        dangling_score = 0
+        
+        for node in graph:
+            new_score = (1 - damping_factor) / num_nodes
+            
+            for referring_node, linked_nodes in graph.items():
+                if not linked_nodes:
+                    dangling_score += damping_factor * pagerank_scores[referring_node] / num_nodes
+                elif node in linked_nodes:
+                    new_score += damping_factor * pagerank_scores[referring_node] / len(linked_nodes)
+                    
+            new_pagerank_scores[node] = new_score + dangling_score
+            
+        if sum(abs(new_pagerank_scores[node] - pagerank_scores[node]) for node in graph) < epsilon:
+            break 
+        else:
+            pagerank_scores = new_pagerank_scores
+            
+    return pagerank_scores
+
+example_graph = {
+    'A': ['B', 'C'],
+    'B': ['D'],
+    'C': ['D'],
+    'D': ['E'],
+    'E': ['F'],
+    'F': []
+}
+
+pagerank_scores = calculate_pagerank(example_graph) 
+print("PageRank scores:", pagerank_scores)

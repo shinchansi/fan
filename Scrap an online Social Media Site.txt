@@ -1,0 +1,23 @@
+pip install nitter
+pip install ntscraper
+
+
+import pandas as pd
+from ntscraper import Nitter
+
+scraper = Nitter()
+tweets = scraper.get_tweets('iamsrk', mode='user', number=2)
+final_tweets = []
+
+for tweet in tweets['tweets']: 
+    data = [
+        tweet['link'],
+        tweet['text'],
+        tweet['date'],
+        tweet['stats']['likes'],
+        tweet['stats']['comments']
+    ]
+    final_tweets.append(data)
+
+data = pd.DataFrame(final_tweets, columns=['link', 'text', 'date', 'No_of_likes', 'No_of_comments'])
+print(data)

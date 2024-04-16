@@ -1,0 +1,18 @@
+from sumy.parsers.plaintext import PlaintextParser 
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.lsa import LsaSummarizer
+sample_text = """
+Addressing climate change demands a multifaceted approach involving global cooperation, innovative technologies, and widespread societal changes. Governments, businesses, and individuals must prioritize sustainable practices, renewable energy sources, and conservation efforts to mitigate the impacts of climate change. Transitioning to a low-carbon economy, investing in green infrastructure, and adopting resilient agricultural practices are crucial steps toward safeguarding the planet for future generations. Education and awareness campaigns play a pivotal role in inspiring collective action and fostering environmental stewardship. By embracing a shared responsibility and taking decisive action now, we can mitigate the worst effects of climate change and build a more sustainable and resilient world for all.
+"""
+def summarize_text(text, sentences_count=2):
+    parser = PlaintextParser.from_string(text, Tokenizer("english"))
+    summarizer = LsaSummarizer()
+    summary = summarizer(parser.document, sentences_count)
+    summarized_text = " ".join([str(sentence) for sentence in summary])
+    return summarized_text
+def main():
+    summarized_text = summarize_text(sample_text) 
+    print("Summarized Text:") 
+    print(summarized_text)
+if __name__ == "__main__": 
+    main()
